@@ -1,6 +1,6 @@
 # Marketplace Seller & Catalog Onboarding
 
-Academic starter project: React + Vite frontend, Spring Boot REST API, MySQL database.
+Academic starter project: React + Vite frontend, Spring Boot REST API, MySQL database
 
 ## Run it
 1. Create a MySQL database: `CREATE DATABASE marketplace_onboarding;`
