@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_MarketplaceOnboarding" targetNamespace="https://example.com/marketplace-onboarding">
+<bpmn:process id="Process_Onboarding" name="Marketplace Seller &amp; Catalog Onboarding" isExecutable="false">
+  <bpmn:laneSet id="LaneSet_1">
+  <bpmn:lane id="Lane_Seller" name="Seller">
+      <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_Register</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_SubmitDetails</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_UploadCatalog</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_CorrectProduct</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_ResubmitCatalog</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>End_Success</bpmn:flowNodeRef>
+    </bpmn:lane>
+  <bpmn:lane id="Lane_Ops" name="Marketplace Operations Team">
+      <bpmn:flowNodeRef>Task_ReviewApplication</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Gateway_DetailsValid</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_RequestInfo</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_VerifyDocuments</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Gateway_SellerApproved</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_RejectSeller</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_ReviewListings</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Gateway_CatalogApproved</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_RequestCorrections</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>End_Rejected</bpmn:flowNodeRef>
+    </bpmn:lane>
+  <bpmn:lane id="Lane_System" name="Marketplace System">
+      <bpmn:flowNodeRef>Task_CreateAccount</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_NotifyApproval</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_ValidateCatalog</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Gateway_CatalogValid</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_ShowErrors</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_PublishProducts</bpmn:flowNodeRef>
+      <bpmn:flowNodeRef>Task_ActivateStore</bpmn:flowNodeRef>
+    </bpmn:lane>
+  </bpmn:laneSet>
+  <bpmn:startEvent id="StartEvent_1" name="Seller begins registration" />
+  <bpmn:userTask id="Task_Register" name="Register on marketplace" />
+  <bpmn:userTask id="Task_SubmitDetails" name="Submit seller details and documents" />
+  <bpmn:userTask id="Task_ReviewApplication" name="Review seller application" />
+  <bpmn:exclusiveGateway id="Gateway_DetailsValid" name="Seller details valid?" />
+  <bpmn:userTask id="Task_RequestInfo" name="Request additional information" />
+  <bpmn:userTask id="Task_VerifyDocuments" name="Verify submitted documents" />
+  <bpmn:exclusiveGateway id="Gateway_SellerApproved" name="Seller approved?" />
+  <bpmn:userTask id="Task_RejectSeller" name="Reject seller application" />
+  <bpmn:serviceTask id="Task_CreateAccount" name="Create seller account" />
+  <bpmn:serviceTask id="Task_NotifyApproval" name="Send approval notification" />
+  <bpmn:userTask id="Task_UploadCatalog" name="Upload product catalog" />
+  <bpmn:serviceTask id="Task_ValidateCatalog" name="Validate product data" />
+  <bpmn:exclusiveGateway id="Gateway_CatalogValid" name="Catalog data valid?" />
+  <bpmn:serviceTask id="Task_ShowErrors" name="Display validation errors" />
+  <bpmn:userTask id="Task_CorrectProduct" name="Correct product information" />
+  <bpmn:userTask id="Task_ResubmitCatalog" name="Resubmit product catalog" />
+  <bpmn:userTask id="Task_ReviewListings" name="Review product listings" />
+  <bpmn:exclusiveGateway id="Gateway_CatalogApproved" name="Catalog approved?" />
+  <bpmn:userTask id="Task_RequestCorrections" name="Request catalog corrections" />
+  <bpmn:serviceTask id="Task_PublishProducts" name="Publish product listings" />
+  <bpmn:serviceTask id="Task_ActivateStore" name="Activate seller store" />
+  <bpmn:endEvent id="End_Success" name="Onboarding complete" />
+  <bpmn:endEvent id="End_Rejected" name="Seller application rejected" />
+  <bpmn:sequenceFlow id="F01" sourceRef="StartEvent_1" targetRef="Task_Register" />
+  <bpmn:sequenceFlow id="F02" sourceRef="Task_Register" targetRef="Task_SubmitDetails" />
+  <bpmn:sequenceFlow id="F03" sourceRef="Task_SubmitDetails" targetRef="Task_ReviewApplication" />
+  <bpmn:sequenceFlow id="F04" sourceRef="Task_ReviewApplication" targetRef="Gateway_DetailsValid" />
+  <bpmn:sequenceFlow id="F05" sourceRef="Gateway_DetailsValid" targetRef="Task_RequestInfo" name="No" />
+  <bpmn:sequenceFlow id="F06" sourceRef="Task_RequestInfo" targetRef="Task_SubmitDetails" />
+  <bpmn:sequenceFlow id="F07" sourceRef="Gateway_DetailsValid" targetRef="Task_VerifyDocuments" name="Yes" />
+  <bpmn:sequenceFlow id="F08" sourceRef="Task_VerifyDocuments" targetRef="Gateway_SellerApproved" />
+  <bpmn:sequenceFlow id="F09" sourceRef="Gateway_SellerApproved" targetRef="Task_RejectSeller" name="No" />
+  <bpmn:sequenceFlow id="F10" sourceRef="Task_RejectSeller" targetRef="End_Rejected" />
+  <bpmn:sequenceFlow id="F11" sourceRef="Gateway_SellerApproved" targetRef="Task_CreateAccount" name="Yes" />
+  <bpmn:sequenceFlow id="F12" sourceRef="Task_CreateAccount" targetRef="Task_NotifyApproval" />
+  <bpmn:sequenceFlow id="F13" sourceRef="Task_NotifyApproval" targetRef="Task_UploadCatalog" />
+  <bpmn:sequenceFlow id="F14" sourceRef="Task_UploadCatalog" targetRef="Task_ValidateCatalog" />
+  <bpmn:sequenceFlow id="F15" sourceRef="Task_ValidateCatalog" targetRef="Gateway_CatalogValid" />
+  <bpmn:sequenceFlow id="F16" sourceRef="Gateway_CatalogValid" targetRef="Task_ShowErrors" name="No" />
+  <bpmn:sequenceFlow id="F17" sourceRef="Task_ShowErrors" targetRef="Task_CorrectProduct" />
+  <bpmn:sequenceFlow id="F18" sourceRef="Task_CorrectProduct" targetRef="Task_ResubmitCatalog" />
+  <bpmn:sequenceFlow id="F19" sourceRef="Task_ResubmitCatalog" targetRef="Task_ValidateCatalog" />
+  <bpmn:sequenceFlow id="F20" sourceRef="Gateway_CatalogValid" targetRef="Task_ReviewListings" name="Yes" />
+  <bpmn:sequenceFlow id="F21" sourceRef="Task_ReviewListings" targetRef="Gateway_CatalogApproved" />
+  <bpmn:sequenceFlow id="F22" sourceRef="Gateway_CatalogApproved" targetRef="Task_RequestCorrections" name="No" />
+  <bpmn:sequenceFlow id="F23" sourceRef="Task_RequestCorrections" targetRef="Task_CorrectProduct" />
+  <bpmn:sequenceFlow id="F24" sourceRef="Gateway_CatalogApproved" targetRef="Task_PublishProducts" name="Yes" />
+  <bpmn:sequenceFlow id="F25" sourceRef="Task_PublishProducts" targetRef="Task_ActivateStore" />
+  <bpmn:sequenceFlow id="F26" sourceRef="Task_ActivateStore" targetRef="End_Success" />
+</bpmn:process>
+<bpmndi:BPMNDiagram id="BPMNDiagram_1">
+  <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Onboarding">
+    <bpmndi:BPMNShape id="Lane_Seller_di" bpmnElement="Lane_Seller" isHorizontal="true" bioc:stroke="#455a64" bioc:fill="#f6faff" color:background-color="#f6faff" color:border-color="#455a64">
+      <dc:Bounds x="80" y="50" width="2440" height="240" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Lane_Ops_di" bpmnElement="Lane_Ops" isHorizontal="true" bioc:stroke="#455a64" bioc:fill="#fffdf5" color:background-color="#fffdf5" color:border-color="#455a64">
+      <dc:Bounds x="80" y="290" width="2440" height="260" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Lane_System_di" bpmnElement="Lane_System" isHorizontal="true" bioc:stroke="#455a64" bioc:fill="#faf7ff" color:background-color="#faf7ff" color:border-color="#455a64">
+      <dc:Bounds x="80" y="550" width="2440" height="240" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1" bioc:stroke="#2e7d32" bioc:fill="#e8f5e9" color:background-color="#e8f5e9" color:border-color="#2e7d32">
+      <dc:Bounds x="152" y="132" width="36" height="36" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="125" y="190" width="90" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_Register_di" bpmnElement="Task_Register" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="230" y="115" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_SubmitDetails_di" bpmnElement="Task_SubmitDetails" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="420" y="115" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_UploadCatalog_di" bpmnElement="Task_UploadCatalog" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="1330" y="115" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ResubmitCatalog_di" bpmnElement="Task_ResubmitCatalog" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="1530" y="115" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_CorrectProduct_di" bpmnElement="Task_CorrectProduct" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="1880" y="115" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="End_Success_di" bpmnElement="End_Success" bioc:stroke="#1b5e20" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#1b5e20">
+      <dc:Bounds x="2382" y="132" width="36" height="36" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="2355" y="98" width="90" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ReviewApplication_di" bpmnElement="Task_ReviewApplication" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="420" y="435" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Gateway_DetailsValid_di" bpmnElement="Gateway_DetailsValid" isMarkerVisible="true" bioc:stroke="#ef6c00" bioc:fill="#fff8e1" color:background-color="#fff8e1" color:border-color="#ef6c00">
+      <dc:Bounds x="635" y="445" width="50" height="50" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="615" y="500" width="90" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_RequestInfo_di" bpmnElement="Task_RequestInfo" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="590" y="315" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_VerifyDocuments_di" bpmnElement="Task_VerifyDocuments" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="760" y="435" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Gateway_SellerApproved_di" bpmnElement="Gateway_SellerApproved" isMarkerVisible="true" bioc:stroke="#ef6c00" bioc:fill="#fff8e1" color:background-color="#fff8e1" color:border-color="#ef6c00">
+      <dc:Bounds x="975" y="445" width="50" height="50" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="905" y="500" width="88" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_RejectSeller_di" bpmnElement="Task_RejectSeller" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="930" y="315" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="End_Rejected_di" bpmnElement="End_Rejected" bioc:stroke="#b71c1c" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#b71c1c">
+      <dc:Bounds x="1132" y="332" width="36" height="36" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1110" y="372" width="80" height="42" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ReviewListings_di" bpmnElement="Task_ReviewListings" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="1710" y="435" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Gateway_CatalogApproved_di" bpmnElement="Gateway_CatalogApproved" isMarkerVisible="true" bioc:stroke="#ef6c00" bioc:fill="#fff8e1" color:background-color="#fff8e1" color:border-color="#ef6c00">
+      <dc:Bounds x="1925" y="445" width="50" height="50" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1905" y="500" width="90" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_RequestCorrections_di" bpmnElement="Task_RequestCorrections" bioc:stroke="#1565c0" bioc:fill="#e3f2fd" color:background-color="#e3f2fd" color:border-color="#1565c0">
+      <dc:Bounds x="1880" y="315" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_CreateAccount_di" bpmnElement="Task_CreateAccount" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="930" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_NotifyApproval_di" bpmnElement="Task_NotifyApproval" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="1140" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ValidateCatalog_di" bpmnElement="Task_ValidateCatalog" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="1530" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Gateway_CatalogValid_di" bpmnElement="Gateway_CatalogValid" isMarkerVisible="true" bioc:stroke="#ef6c00" bioc:fill="#fff8e1" color:background-color="#fff8e1" color:border-color="#ef6c00">
+      <dc:Bounds x="1755" y="645" width="50" height="50" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1735" y="700" width="90" height="28" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ShowErrors_di" bpmnElement="Task_ShowErrors" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="1880" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_PublishProducts_di" bpmnElement="Task_PublishProducts" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="2140" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ActivateStore_di" bpmnElement="Task_ActivateStore" bioc:stroke="#6a1b9a" bioc:fill="#f3e5f5" color:background-color="#f3e5f5" color:border-color="#6a1b9a">
+      <dc:Bounds x="2330" y="635" width="140" height="70" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNEdge id="F01_di" bpmnElement="F01">
+      <di:waypoint x="188" y="150" />
+      <di:waypoint x="230" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F02_di" bpmnElement="F02">
+      <di:waypoint x="370" y="150" />
+      <di:waypoint x="420" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F03_di" bpmnElement="F03">
+      <di:waypoint x="490" y="185" />
+      <di:waypoint x="490" y="435" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F04_di" bpmnElement="F04">
+      <di:waypoint x="560" y="470" />
+      <di:waypoint x="635" y="470" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F05_di" bpmnElement="F05">
+      <di:waypoint x="660" y="445" />
+      <di:waypoint x="660" y="385" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="668" y="408" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F06_di" bpmnElement="F06">
+      <di:waypoint x="660" y="315" />
+      <di:waypoint x="660" y="150" />
+      <di:waypoint x="560" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F07_di" bpmnElement="F07">
+      <di:waypoint x="685" y="470" />
+      <di:waypoint x="760" y="470" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="710" y="450" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F08_di" bpmnElement="F08">
+      <di:waypoint x="900" y="470" />
+      <di:waypoint x="975" y="470" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F09_di" bpmnElement="F09">
+      <di:waypoint x="1000" y="445" />
+      <di:waypoint x="1000" y="385" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1008" y="408" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+      <di:waypoint x="1070" y="350" />
+      <di:waypoint x="1132" y="350" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+      <di:waypoint x="1000" y="495" />
+      <di:waypoint x="1000" y="635" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1008" y="560" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+      <di:waypoint x="1070" y="670" />
+      <di:waypoint x="1140" y="670" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+      <di:waypoint x="1210" y="635" />
+      <di:waypoint x="1210" y="150" />
+      <di:waypoint x="1330" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+      <di:waypoint x="1400" y="185" />
+      <di:waypoint x="1400" y="670" />
+      <di:waypoint x="1530" y="670" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+      <di:waypoint x="1670" y="670" />
+      <di:waypoint x="1755" y="670" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+      <di:waypoint x="1805" y="670" />
+      <di:waypoint x="1880" y="670" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1832" y="650" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17">
+      <di:waypoint x="2020" y="670" />
+      <di:waypoint x="2090" y="670" />
+      <di:waypoint x="2090" y="150" />
+      <di:waypoint x="2020" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18">
+      <di:waypoint x="1880" y="150" />
+      <di:waypoint x="1670" y="150" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19">
+      <di:waypoint x="1600" y="185" />
+      <di:waypoint x="1600" y="635" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F20_di" bpmnElement="F20">
+      <di:waypoint x="1780" y="645" />
+      <di:waypoint x="1780" y="505" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1788" y="570" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F21_di" bpmnElement="F21">
+      <di:waypoint x="1850" y="470" />
+      <di:waypoint x="1925" y="470" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F22_di" bpmnElement="F22">
+      <di:waypoint x="1950" y="445" />
+      <di:waypoint x="1950" y="385" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1958" y="408" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F23_di" bpmnElement="F23">
+      <di:waypoint x="1950" y="315" />
+      <di:waypoint x="1950" y="185" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F24_di" bpmnElement="F24">
+      <di:waypoint x="1975" y="470" />
+      <di:waypoint x="2210" y="470" />
+      <di:waypoint x="2210" y="635" />
+      <bpmndi:BPMNLabel>
+        <dc:Bounds x="1995" y="450" width="22" height="14" />
+      </bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F25_di" bpmnElement="F25">
+      <di:waypoint x="2280" y="670" />
+      <di:waypoint x="2330" y="670" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="F26_di" bpmnElement="F26">
+      <di:waypoint x="2400" y="635" />
+      <di:waypoint x="2400" y="168" />
+    </bpmndi:BPMNEdge>
+  </bpmndi:BPMNPlane>
+</bpmndi:BPMNDiagram>
+</bpmn:definitions>

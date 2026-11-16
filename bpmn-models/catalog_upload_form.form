@@ -1,0 +1,32 @@
+{
+  "id": "Form_CatalogUpload",
+  "components": [
+    {
+      "type": "text",
+      "text": "## Upload Product Catalog\nPlease provide the list of products you want to submit for review.",
+      "id": "Field_CatalogText"
+    },
+    {
+      "key": "sellerNotes",
+      "label": "Seller Notes",
+      "type": "textarea",
+      "id": "Field_SellerNotes",
+      "description": "Any notes for the operations team"
+    },
+    {
+      "key": "catalogReady",
+      "label": "I confirm the catalog is complete and accurate",
+      "type": "checkbox",
+      "id": "Field_CatalogReady",
+      "validate": { "required": true }
+    }
+  ],
+  "type": "default",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.5.0",
+  "schemaVersion": 10
+}

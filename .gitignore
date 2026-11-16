@@ -1,0 +1,20 @@
+# Build and dependency directories
+backend-springboot/target/
+frontend-react/node_modules/
+frontend-react/dist/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.iml
+.settings/
+.project
+.classpath
+
+# Temp files
+*.tmp
+*.bak
+temp_zip_extract/

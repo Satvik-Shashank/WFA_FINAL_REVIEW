@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./backend-springboot
+      dockerfile: Dockerfile
+    container_name: marketplace-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:h2:mem:marketplace_onboarding;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      - DB_USERNAME=sa
+      - DB_PASSWORD=
+      - ZEEBE_GRPC_ADDRESS=http://zeebe:26500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      zeebe:
+        condition: service_healthy
+    networks:
+      - marketplace-net
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+    container_name: marketplace-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - marketplace-net
+    restart: unless-stopped
+
+  # Camunda 8 Zeebe Engine
+  zeebe:
+    image: camunda/zeebe:8.5.0
+    container_name: marketplace-zeebe
+    ports:
+      - "26500:26500"
+      - "9600:9600"
+    environment:
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.camunda.zeebe.exporter.ElasticsearchExporter
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
+      - ZEEBE_BROKER_DATA_DISKUSAGECOMMANDWATERMARK=0.998
+      - ZEEBE_BROKER_DATA_DISKUSAGEREPLICATIONWATERMARK=0.999
+    healthcheck:
+      test: ["CMD", "zbctl", "status", "--insecure", "--address", "zeebe:26500"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    depends_on:
+      - elasticsearch
+    networks:
+      - marketplace-net
+    restart: unless-stopped
+
+  # Camunda Operate (Process Monitoring UI)
+  operate:
+    image: camunda/operate:8.5.0
+    container_name: marketplace-operate
+    ports:
+      - "8081:8080"
+    environment:
+      - CAMUNDA_OPERATE_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=http://elasticsearch:9200
+    depends_on:
+      - zeebe
+      - elasticsearch
+    networks:
+      - marketplace-net
+    restart: unless-stopped
+
+  # Elasticsearch (required by Zeebe + Operate)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.2
+    container_name: marketplace-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    networks:
+      - marketplace-net
+    restart: unless-stopped
+
+networks:
+  marketplace-net:
+    driver: bridge
