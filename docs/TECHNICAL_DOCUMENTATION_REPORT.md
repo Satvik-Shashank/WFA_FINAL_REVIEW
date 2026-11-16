@@ -239,6 +239,30 @@ The root `docker-compose.yml` configures 5 interconnected services on the `marke
 7. `ProductCatalogWorker` validates catalog, ops performs review, `publish-products` worker marks items `APPROVED`.
 8. Items appear immediately on `/api/products/approved`.
 
+### 6.3 User Interface and Process Verification Gallery
+
+The following captures demonstrate the live execution of MarketFlow across all core functional perspectives:
+
+#### 1. Executive Operations & Telemetry Dashboard
+The executive interface displays real-time key performance indicators, active Zeebe job worker telemetry (7 registered background microservices), and macro-level orchestration pipeline status tracking.
+
+![Executive Management Dashboard](screenshots/01_executive_dashboard.jpg)
+
+#### 2. Interactive BPMN 2.0 Sequence Flow Simulation
+Allows dynamic walkthrough and verification of token routes (Success Path, Seller Rejection, Info Request Loop, and Catalog Correction Loop) with direct mapping to FEEL conditional gateway expressions.
+
+![Interactive BPMN 2.0 Sequence Flow Diagram](screenshots/02_bpmn_interactive_flow.jpg)
+
+#### 3. Partner Onboarding Dossier & Multi-Instance Array Builder
+Demonstrates dynamic parallel Multi-Instance document array creation, capturing legal credentials (GSTIN, PAN Card, Trade License, Bank Mandate) and initiating the Camunda 8 Zeebe instance.
+
+![Partner Onboarding Dossier](screenshots/03_partner_onboarding_dossier.jpg)
+
+#### 4. Live Commercial Marketplace Storefront
+Validates end-to-end workflow completion: items verified through the child catalog review workflow and published by automated worker beans render directly on the public commercial catalog with verified badges and price specifications.
+
+![Live Commercial Marketplace Storefront](screenshots/04_live_commercial_marketplace.jpg)
+
 ---
 
 ## Chapter 7: Individual Contributions and Conclusion

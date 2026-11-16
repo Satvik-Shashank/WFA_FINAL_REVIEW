@@ -13,6 +13,20 @@ MarketFlow automates the complete lifecycle of onboarding marketplace sellers an
 
 ---
 
+## User Interface & Dashboard Showcase
+
+| Executive Management Dashboard | Interactive BPMN 2.0 Sequence Flow |
+|:---:|:---:|
+| ![Executive Dashboard](docs/screenshots/01_executive_dashboard.jpg) | ![Interactive BPMN Flow](docs/screenshots/02_bpmn_interactive_flow.jpg) |
+| *Real-time metrics, active sellers, pipeline status & Zeebe worker health* | *Interactive token replay across Happy Path, Rejection & Correction loops* |
+
+| Partner Onboarding Dossier | Live Commercial Marketplace |
+|:---:|:---:|
+| ![Partner Onboarding Dossier](docs/screenshots/03_partner_onboarding_dossier.jpg) | ![Live Commercial Marketplace](docs/screenshots/04_live_commercial_marketplace.jpg) |
+| *Multi-Instance document verification collection array builder* | *Published storefront verified through automated catalog review pipeline* |
+
+---
+
 ## Technology Stack
 
 | Layer | Technology | Version |
